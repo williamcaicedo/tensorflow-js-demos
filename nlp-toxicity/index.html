@@ -1,0 +1,39 @@
+<html>
+
+<head></head>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest'></script>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow-models/toxicity'></script>
+
+
+<body>
+    <h1>Toxicity detection with Tensorflow.js</h1>
+    <input id='sentence' type='text'>
+    <button id='dtb'>Detect!</button>
+
+
+</body>
+<script lang='js'>
+    const threshold = 0.9;
+    toxicity.load(threshold).then(model => {
+        //const sentences = ['you suck!'];
+        document.getElementById('dtb').addEventListener('click', e => {
+            const sentences = document.getElementById('sentence').value;
+            console.log('Input sentence is: "' + sentences + '"');
+            model.classify(sentences).then(predictions => {
+                console.log(predictions);
+                predictions.forEach(p => {
+                    if (p.results[0].match) {
+                        console.log(p.label + ' was found with a probability of '
+                            + p.results[0].probabilities[1]);
+                    }
+                });
+            });
+        });
+
+
+    });
+
+
+</script>
+
+</html>

@@ -1,0 +1,74 @@
+<html>
+
+<head></head>
+<style>
+    #dropTarget {
+        width: 400px;
+        height: 400px;
+        border: 1px #ccc solid;
+        padding: 10px;
+        overflow: auto;
+    }
+    #output {
+        font-family:courier;
+        font-size:24px;
+        height:300px
+    }
+</style>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest'></script>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow-models/mobilenet@1.0.0'></script>
+
+<body>
+    <h1>Image Classification (MobileNet trained on ImageNet) with Tensorflow.js</h1>
+    <div id='dropTarget'>Drop your image here</div>
+    <div id='imgPreview'></div>
+    <br/>
+    <button id='cb'>Classify Image!</button>
+    <div id="output"></div>
+</body>
+
+<script lang='js'>
+    const dropTarget = document.getElementById('dropTarget');
+    dropTarget.addEventListener('dragover', evt => {
+        evt.stopPropagation();
+        evt.preventDefault();
+        evt.dataTransfer.dropEffect = 'copy';
+    });
+    dropTarget.addEventListener('drop', evt => {
+        evt.stopPropagation();
+        evt.preventDefault();
+        var img = evt.dataTransfer.files[0];
+        var reader = new FileReader();
+        reader.onload = (function (tFile) {
+            return evt => {
+                var imgDiv = document.createElement('div');
+                imageSuffix = dropTarget.childElementCount + 1;
+                imgDiv.innerHTML = '<img id="image_' + imageSuffix +
+                '" style="width:350px;margin:5px;" src="' + evt.target.result + '"/>';
+                dropTarget.appendChild(imgDiv);
+                imgDiv.scrollIntoView(false);
+            };
+        }(img));
+        reader.readAsDataURL(img);
+
+    });
+
+    mobilenet.load().then(model => {
+        const classifyButton = document.getElementById('cb');
+        const output = document.getElementById('output');
+        classifyButton.addEventListener('click', evt => {
+            const image = document.getElementById('image_' + dropTarget.childElementCount);
+            console.log(dropTarget.childElementCount);
+            model.classify(image).then(predictions => {
+                console.log(predictions);
+                predictions.forEach(p => {
+                    output.innerHTML += '<br/>' + p.className + ' : ' + p.probability ;
+                });
+                output.innerHTML +=  ' <br/> ---------------';
+            });
+        });
+    });
+
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+<html>
+
+<head></head>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest'></script>
+<script src='https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis'></script>
+
+<style>
+    #canvas {
+        position: absolute;
+        top: 100;
+        left: 100;
+        border: 8px solid;
+    }
+
+    #canvasimg {
+        position: absolute;
+        top: 10%;
+        left: 52%;
+        width: 280;
+        height: 280;
+        display: none;
+    }
+
+    #sb {
+        position: absolute;
+        top: 400;
+        left: 100;
+    }
+
+    #cb {
+        position: absolute;
+        top: 400;
+        left: 180;
+    }
+</style>
+
+<body>
+    <h1>Handwriting Classifier</h1>
+    <canvas id='canvas' width='280' height='280'></canvas>
+    <img id='canvasImg'>
+    <input type='button' value='classify' id='sb' size=48>
+    <input type='button' value='clear' id='cb' size=23>
+    <script src="data.js" type="module"></script>
+    <script src="script.js" type="module"></script>
+</body>
+
+</html>
